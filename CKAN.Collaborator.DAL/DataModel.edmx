@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CKANDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TblActivity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActivityNames_ID" Type="int" Nullable="false" />
+          <Property Name="IPAddress" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Collaborator_ID" Type="int" />
+          <Property Name="Box_ID" Type="int" />
+          <Property Name="Status_ID" Type="int" />
+          <Property Name="Status_Name" Type="varchar" MaxLength="200" />
+          <Property Name="FileName" Type="varchar" MaxLength="200" />
+          <Property Name="FileSize" Type="int" />
+          <Property Name="Ver" Type="int" />
+        </EntityType>
+        <EntityType Name="TblActivityNames">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="Notes" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="TblCollaborator">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="VaultID" Type="int" />
+          <Property Name="CollabeEmail" Type="varchar" MaxLength="200" />
+          <Property Name="CollabID" Type="int" />
+          <Property Name="Token" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="TblUsers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EMail" Type="varchar" MaxLength="200" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="License_Allowed" Type="int" />
+          <Property Name="License_Total" Type="int" />
+          <Property Name="User_Role" Type="int" />
+        </EntityType>
+        <Association Name="FK__TblActivi__Activ__5165187F">
+          <End Role="TblActivityNames" Type="Self.TblActivityNames" Multiplicity="1" />
+          <End Role="TblActivity" Type="Self.TblActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblActivityNames">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TblActivity">
+              <PropertyRef Name="ActivityNames_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TblActivi__Creat__52593CB8">
+          <End Role="TblUsers" Type="Self.TblUsers" Multiplicity="1" />
+          <End Role="TblActivity" Type="Self.TblActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TblActivity">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TblCollab__UserI__286302EC">
+          <End Role="TblUsers" Type="Self.TblUsers" Multiplicity="0..1" />
+          <End Role="TblCollaborator" Type="Self.TblCollaborator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TblCollaborator">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SpCreateCollaborator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="VaultID" Type="int" Mode="In" />
+          <Parameter Name="CollabeMail" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="CollabID" Type="int" Mode="In" />
+          <Parameter Name="Token" Type="nvarchar" Mode="In" />
+          <Parameter Name="IPAddress" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SpDeleteCollaborator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="IPAddress" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SpLogActivities" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActivityNames_ID" Type="int" Mode="In" />
+          <Parameter Name="IPAddress" Type="varchar" Mode="In" />
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+          <Parameter Name="Collaborator_ID" Type="int" Mode="In" />
+          <Parameter Name="Box_ID" Type="int" Mode="In" />
+          <Parameter Name="Status_ID" Type="int" Mode="In" />
+          <Parameter Name="Status_Name" Type="varchar" Mode="In" />
+          <Parameter Name="FileName" Type="varchar" Mode="In" />
+          <Parameter Name="FileSize" Type="int" Mode="In" />
+          <Parameter Name="Ver" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SpVerifyCollaborator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="VaultID" Type="int" Mode="In" />
+          <Parameter Name="CollabeMail" Type="nvarchar" Mode="In" />
+          <Parameter Name="Token" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="CKANDBModelStoreContainer">
+          <EntitySet Name="TblActivity" EntityType="Self.TblActivity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblActivityNames" EntityType="Self.TblActivityNames" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblCollaborator" EntityType="Self.TblCollaborator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblUsers" EntityType="Self.TblUsers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__TblActivi__Activ__5165187F" Association="Self.FK__TblActivi__Activ__5165187F">
+            <End Role="TblActivityNames" EntitySet="TblActivityNames" />
+            <End Role="TblActivity" EntitySet="TblActivity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TblActivi__Creat__52593CB8" Association="Self.FK__TblActivi__Creat__52593CB8">
+            <End Role="TblUsers" EntitySet="TblUsers" />
+            <End Role="TblActivity" EntitySet="TblActivity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TblCollab__UserI__286302EC" Association="Self.FK__TblCollab__UserI__286302EC">
+            <End Role="TblUsers" EntitySet="TblUsers" />
+            <End Role="TblCollaborator" EntitySet="TblCollaborator" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CKANDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TblCollaborator">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="VaultID" Type="Int32" />
+          <Property Name="CollabeEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CollabID" Type="Int32" />
+          <Property Name="Token" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TblUser" Relationship="Self.FK__TblCollab__UserI__286302EC" FromRole="TblCollaborator" ToRole="TblUsers" />
+        </EntityType>
+        <EntityType Name="TblUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EMail" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="License_Allowed" Type="Int32" />
+          <Property Name="License_Total" Type="Int32" />
+          <Property Name="User_Role" Type="Int32" />
+          <NavigationProperty Name="TblCollaborators" Relationship="Self.FK__TblCollab__UserI__286302EC" FromRole="TblUsers" ToRole="TblCollaborator" />
+          <NavigationProperty Name="TblActivities" Relationship="CKANDBModel.FK__TblActivi__Creat__52593CB8" FromRole="TblUser" ToRole="TblActivity" />
+        </EntityType>
+        <Association Name="FK__TblCollab__UserI__286302EC">
+          <End Role="TblUsers" Type="Self.TblUser" Multiplicity="0..1" />
+          <End Role="TblCollaborator" Type="Self.TblCollaborator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblUsers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TblCollaborator">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CKANDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TblCollaborators" EntityType="Self.TblCollaborator" />
+          <EntitySet Name="TblUsers" EntityType="Self.TblUser" />
+          <AssociationSet Name="FK__TblCollab__UserI__286302EC" Association="Self.FK__TblCollab__UserI__286302EC">
+            <End Role="TblUsers" EntitySet="TblUsers" />
+            <End Role="TblCollaborator" EntitySet="TblCollaborators" />
+          </AssociationSet>
+          <FunctionImport Name="SpCreateCollaborator" ReturnType="Collection(String)">
+            <Parameter Name="VaultID" Mode="In" Type="Int32" />
+            <Parameter Name="CollabeMail" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="CollabID" Mode="In" Type="Int32" />
+            <Parameter Name="Token" Mode="In" Type="String" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SpDeleteCollaborator" ReturnType="Collection(String)">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FnImpSpCreateCollaborator" ReturnType="Collection(String)">
+            <Parameter Name="VaultID" Mode="In" Type="Int32" />
+            <Parameter Name="CollabeMail" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="CollabID" Mode="In" Type="Int32" />
+            <Parameter Name="Token" Mode="In" Type="String" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FnImpSpDeleteCollaborator" ReturnType="Collection(String)">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="TblActivities" EntityType="CKANDBModel.TblActivity" />
+          <EntitySet Name="TblActivityNames" EntityType="CKANDBModel.TblActivityName" />
+          <AssociationSet Name="FK__TblActivi__Activ__5165187F" Association="CKANDBModel.FK__TblActivi__Activ__5165187F">
+            <End Role="TblActivityName" EntitySet="TblActivityNames" />
+            <End Role="TblActivity" EntitySet="TblActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TblActivi__Creat__52593CB8" Association="CKANDBModel.FK__TblActivi__Creat__52593CB8">
+            <End Role="TblUser" EntitySet="TblUsers" />
+            <End Role="TblActivity" EntitySet="TblActivities" />
+          </AssociationSet>
+          <FunctionImport Name="SpLogActivities">
+            <Parameter Name="ActivityNames_ID" Mode="In" Type="Int32" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+            <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+            <Parameter Name="Collaborator_ID" Mode="In" Type="Int32" />
+            <Parameter Name="Box_ID" Mode="In" Type="Int32" />
+            <Parameter Name="Status_ID" Mode="In" Type="Int32" />
+            <Parameter Name="Status_Name" Mode="In" Type="String" />
+            <Parameter Name="FileName" Mode="In" Type="String" />
+            <Parameter Name="FileSize" Mode="In" Type="Int32" />
+            <Parameter Name="Ver" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SpVerifyCollaborator" ReturnType="Collection(String)">
+            <Parameter Name="VaultID" Mode="In" Type="Int32" />
+            <Parameter Name="CollabeMail" Mode="In" Type="String" />
+            <Parameter Name="Token" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FnImpSpVerifyCollaborator" ReturnType="Collection(String)">
+            <Parameter Name="VaultID" Mode="In" Type="Int32" />
+            <Parameter Name="CollabeMail" Mode="In" Type="String" />
+            <Parameter Name="Token" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="TblActivity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityNames_ID" Type="Int32" Nullable="false" />
+          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Collaborator_ID" Type="Int32" />
+          <Property Name="Box_ID" Type="Int32" />
+          <Property Name="Status_ID" Type="Int32" />
+          <Property Name="Status_Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FileName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FileSize" Type="Int32" />
+          <Property Name="Ver" Type="Int32" />
+          <NavigationProperty Name="TblActivityName" Relationship="CKANDBModel.FK__TblActivi__Activ__5165187F" FromRole="TblActivity" ToRole="TblActivityName" />
+          <NavigationProperty Name="TblUser" Relationship="CKANDBModel.FK__TblActivi__Creat__52593CB8" FromRole="TblActivity" ToRole="TblUser" />
+        </EntityType>
+        <EntityType Name="TblActivityName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Notes" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TblActivities" Relationship="CKANDBModel.FK__TblActivi__Activ__5165187F" FromRole="TblActivityName" ToRole="TblActivity" />
+        </EntityType>
+        <Association Name="FK__TblActivi__Activ__5165187F">
+          <End Type="CKANDBModel.TblActivityName" Role="TblActivityName" Multiplicity="1" />
+          <End Type="CKANDBModel.TblActivity" Role="TblActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblActivityName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TblActivity">
+              <PropertyRef Name="ActivityNames_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TblActivi__Creat__52593CB8">
+          <End Type="CKANDBModel.TblUser" Role="TblUser" Multiplicity="1" />
+          <End Type="CKANDBModel.TblActivity" Role="TblActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TblActivity">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CKANDBModelStoreContainer" CdmEntityContainer="CKANDBEntities">
+          <EntitySetMapping Name="TblCollaborators">
+            <EntityTypeMapping TypeName="CKANDBModel.TblCollaborator">
+              <MappingFragment StoreEntitySet="TblCollaborator">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="VaultID" ColumnName="VaultID" />
+                <ScalarProperty Name="CollabeEmail" ColumnName="CollabeEmail" />
+                <ScalarProperty Name="CollabID" ColumnName="CollabID" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblUsers">
+            <EntityTypeMapping TypeName="CKANDBModel.TblUser">
+              <MappingFragment StoreEntitySet="TblUsers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="License_Allowed" ColumnName="License_Allowed" />
+                <ScalarProperty Name="License_Total" ColumnName="License_Total" />
+                <ScalarProperty Name="User_Role" ColumnName="User_Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SpCreateCollaborator" FunctionName="CKANDBModel.Store.SpCreateCollaborator" />
+          <FunctionImportMapping FunctionImportName="SpDeleteCollaborator" FunctionName="CKANDBModel.Store.SpDeleteCollaborator" />
+          <FunctionImportMapping FunctionImportName="FnImpSpCreateCollaborator" FunctionName="CKANDBModel.Store.SpCreateCollaborator" />
+          <FunctionImportMapping FunctionImportName="FnImpSpDeleteCollaborator" FunctionName="CKANDBModel.Store.SpDeleteCollaborator" />
+          <EntitySetMapping Name="TblActivities">
+            <EntityTypeMapping TypeName="CKANDBModel.TblActivity">
+              <MappingFragment StoreEntitySet="TblActivity">
+                <ScalarProperty Name="Ver" ColumnName="Ver" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="Status_Name" ColumnName="Status_Name" />
+                <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+                <ScalarProperty Name="Box_ID" ColumnName="Box_ID" />
+                <ScalarProperty Name="Collaborator_ID" ColumnName="Collaborator_ID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="ActivityNames_ID" ColumnName="ActivityNames_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblActivityNames">
+            <EntityTypeMapping TypeName="CKANDBModel.TblActivityName">
+              <MappingFragment StoreEntitySet="TblActivityNames">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SpLogActivities" FunctionName="CKANDBModel.Store.SpLogActivities" />
+          <FunctionImportMapping FunctionImportName="SpVerifyCollaborator" FunctionName="CKANDBModel.Store.SpVerifyCollaborator" />
+          <FunctionImportMapping FunctionImportName="FnImpSpVerifyCollaborator" FunctionName="CKANDBModel.Store.SpVerifyCollaborator" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
