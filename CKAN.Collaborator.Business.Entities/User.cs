@@ -10,5 +10,6 @@ namespace CKAN.Collaborator.Business.Entities
         public int NoOfTotalLicense { get; set; }
         public int NoOfAvailableLicense { get; set; }
         public int UserRoleID { get; set; }
+
     }
 }
